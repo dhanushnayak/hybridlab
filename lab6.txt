@@ -1,0 +1,163 @@
+activity_main.xml
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="55dp"
+        android:layout_marginBottom="358dp"
+        android:background="@drawable/button"
+        android:text="Play" />
+
+    <Button
+        android:id="@+id/pause"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="221dp"
+        android:layout_marginBottom="357dp"
+        android:background="@drawable/button"
+        android:text="Pause" />
+
+    <Button
+        android:id="@+id/stop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginEnd="134dp"
+        android:layout_marginBottom="160dp"
+        android:background="@drawable/button"
+        android:text="Stop" />
+
+    <Button
+        android:id="@+id/rewind"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="55dp"
+        android:layout_marginBottom="246dp"
+        android:background="@drawable/button"
+        android:text="Rewind" />
+
+    <Button
+        android:id="@+id/forward"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="54dp"
+        android:layout_marginBottom="247dp"
+        android:background="@drawable/button"
+        android:text="Forward" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
+        android:text="Enjoy your Music !!"
+        android:textSize="40dp"/>
+
+</RelativeLayout>
+
+MainActivity.java
+package com.example.program6;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.media.MediaPlayer;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
+
+public class MainActivity extends AppCompatActivity {
+
+    private Button play, stop, pause, forward, rewind;
+    MediaPlayer mplayer;
+    int startime = 0;
+    int endtime = 0;
+    int forwardtime = 10000;
+    int rewindtime = 10000;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        play = findViewById(R.id.play);
+        pause = findViewById(R.id.pause);
+        stop = findViewById(R.id.stop);
+        forward = findViewById(R.id.forward);
+        rewind = findViewById(R.id.rewind);
+        mplayer = MediaPlayer.create(this, R.raw.song);
+
+        play.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "Song Playing", Toast.LENGTH_LONG).show();
+                mplayer.start();
+            }
+        });
+
+        pause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "Song Paused", Toast.LENGTH_LONG).show();
+                mplayer.pause();
+            }
+        });
+
+        stop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "Song Stopped", Toast.LENGTH_LONG).show();
+                mplayer.stop();
+            }
+        });
+
+        forward.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "Forward", Toast.LENGTH_LONG).show();
+                int current = mplayer.getCurrentPosition();
+                int duration = mplayer.getDuration();
+
+                if(current + forwardtime < duration){
+                    mplayer.seekTo(current+forwardtime);
+                }
+            }
+        });
+
+        rewind.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "Rewind", Toast.LENGTH_LONG).show();
+                int current = mplayer.getCurrentPosition();
+                int duration = mplayer.getDuration();
+
+                if(current - rewindtime != duration){
+                    mplayer.seekTo(current-rewindtime);
+                }
+            }
+        });
+
+    }
+}
